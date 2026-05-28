@@ -10,15 +10,39 @@ The user's text is sent to the Groq API (Llama 3.3 70B model). The model is
 asked to return JSON with five fields. The UI parses the response and shows
 the result, including the colors as visible swatches.
 
-## Files
+#Authors
 
-- `main.py` — Entry point. Imports `run` from `ui` and starts the application.
-- `ui.py` — Tkinter interface (input, generate button, output, color swatches, save & history buttons). The window is built inside a `run()` function and only launches when the file is executed directly, so the module can be imported safely from `main.py` or for testing.
-- `ai_engine.py` — Sends the prompt to Groq and parses the JSON response.
-- `data_handler.py` — Saves and loads scene records to/from `scenes.csv`.
-- `stats.py` — Bar chart of how often each emotion has been generated.
-- `config.py` — Model name, data file path, API key (from env variable).
-- `requirements.txt` — List of external Python packages the project depends on (`groq`, `pandas`, `matplotlib`). Used by `pip install -r requirements.txt` to install everything in one step.
+Zeynep Kesim — prompt work, scene quality, and the image-generation integration (the new API, the
+schema change, the extra error handling).
+Mohoshena - The Flask version: routes, templates, static files, and deployment. Also any
+small refactoring in data_handler and stats so they behave the same way in both versions.
+Both of us : testing the two versions against each other, GitHub, the final presentation and
+the demo.
+
+
+## Project Structure
+
+project/
+│
+├── main.py              
+├── ai_engine.py         
+├── image_engine.py      
+├── config.py            
+├── data_handler.py      
+├── stats.py             
+├── ui.py                
+│
+├── app.py               
+├── templates/
+│   ├── index.html       
+│   └── history.html     
+├── static/
+│   └── style.css        
+│
+├── requirements.txt     
+└── scenes.csv          
+
+
 
 ## Setup
 
@@ -42,6 +66,11 @@ the result, including the colors as visible swatches.
    ```
    python main.py
    ```
+4. Running the Desktop App (Tkinter)
+python main.py
+5. Running the Web App (Flask)
+python app.py
+Open your browser and go to http://127.0.0.1:5000
 
 ## Usage
 
@@ -73,6 +102,17 @@ Groq API and shows a targeted message in the output area:
 
 Any unforeseen exception is caught and displayed as `Unexpected error: ...`
 so the application never crashes during use.
+
+Dependencies
+
+groq — Groq API client
+flask — Web framework
+pandas — Data handling and analysis
+matplotlib — Emotion history chart
+
+Security Note
+Never commit your API key to GitHub. The key is loaded from an environment
+variable (GROQ_API_KEY) and config.py is listed in .gitignore.
 
 ## AI Usage Disclosure
 
