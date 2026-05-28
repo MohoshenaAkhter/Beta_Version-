@@ -24,6 +24,16 @@
                 <p><strong>🎨 Colors:</strong></p>
                 <div id="swatches" class="swatches"></div>
             </div>
+
+            <!-- Cinematic Image -->
+            <div id="image-section" style="display:none; margin-top:15px;">
+                <div class="result-box">
+                    <p><strong>🖼️ Cinematic Image:</strong></p>
+                    <img id="scene-image" src="" alt="Cinematic Scene"
+                         style="width:100%; border-radius:8px; margin-top:8px;">
+                </div>
+            </div>
+
             <button onclick="saveScene()">💾 Save Scene</button>
             <a href="/history"><button>📊 View History</button></a>
         </div>
@@ -44,6 +54,7 @@
             btn.textContent = "Generating...";
             document.getElementById("error-msg").textContent = "";
             document.getElementById("output-section").style.display = "none";
+            document.getElementById("image-section").style.display = "none";
 
             try {
                 const res = await fetch("/generate", {
@@ -62,6 +73,7 @@
                 document.getElementById("camera").textContent = data.camera_style;
                 document.getElementById("lighting").textContent = data.lighting;
 
+                // Color swatches
                 const swatches = document.getElementById("swatches");
                 swatches.innerHTML = "";
                 data.colors.forEach(c => {
@@ -72,7 +84,14 @@
                     swatches.appendChild(div);
                 });
 
+                // Show image if available
+                if (data.image_url) {
+                    document.getElementById("scene-image").src = data.image_url;
+                    document.getElementById("image-section").style.display = "block";
+                }
+
                 document.getElementById("output-section").style.display = "block";
+
             } catch (err) {
                 document.getElementById("error-msg").textContent = "Error: " + err.message;
             } finally {
